@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Environment Monitoring</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      h1 {
+        color: #4a86e8;
+      }
+     .temperature,.humidity {
+        font-size: 3em;
+        font-weight: bold;
+      }
+     .temperature {
+        color: #ff6b6b;
+      }
+     .humidity {
+        color: #32cd32;
+      }
+     .label {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Environment Monitoring</h1>
+    <div class="temperature">
+      <span class="value" id="temperature"></span>
+      <span class="label">Temperature</span>
+    </div>
+    <div class="humidity">
+      <span class="value" id="humidity"></span>
+      <span class="label">Humidity</span>
+    </div>
+
+    <script>
+      // Replace with the actual URL of your Blackbox Exporter
+      var url = "http://localhost:9115/probe?module=http_2xx&target=http://example.com";
+
+      fetch(url)
+      .then(response => response.text())
+      .then(data => {
+          var parser = new DOMParser();
+          var xml = parser.parseFromString(data, "application/xml");
+          document.getElementById("temperature").innerText = xml.querySelector("temperature").getAttribute("value");
+          document.getElementById("humidity").innerText = xml.querySelector("humidity").getAttribute("value");
+        });
+    </script>
+  </body>
+</html>
